@@ -1,14 +1,15 @@
 const mongoose = require("mongoose");
 
 const carsSchema = mongoose.Schema({
-    carID: { type: Number, required: true },
+    carId: { type: Number, required: true },
     make: { type: String, required: true},
     year: { type: Number, required: true},
     price: { type: Number, required: true },
     transmission: { type: String },
     mileage: { type: Number },
     condition: {type: String },
-    comment: {type: String }
+    comment: {type: String },
+    commission: {type: String, default: "2% commission"}
 });
 
 const Car = mongoose.model("Car", carsSchema);

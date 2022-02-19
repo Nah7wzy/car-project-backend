@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require("mongoose");
 const router = express.Router();
 const Car = require("../models/cars");
 
@@ -24,22 +25,37 @@ const cars = [
 //     else res.send(filteredCars);
 // });
 
+router.get("/", async (req, res) => {
+  try {
+    const cars = await Car.find();
+    res.send(cars);
+    console.log(cars)
+  } catch (err) {
+    res.send({
+      error: err,
+    });
+    console.log(err);
+  }
+});
+
+
 
 // get specific car
-router.get("/:id", async (req, res) => {
+router.get("/:carId", async (req, res) => {
     try {
-      const result = await Car.find({ carId: req.params?.id });
+      const result = await Car.find({ carId: req.params?.carId });
       res.status(200).send(result);
+      // res.send("it's working") 
     } catch (err) {
       console.error(err);
-      res.status(404).send("Car could not be found!");
+      // res.status(404).send("Car could not be found!");
     }
   });
 
 
 router.post("/", async (req, res) => {
-    const newCcar = {
-        carId:req.body.carId,
+    const newCar = new Car( {
+        carId: req.body.carId,
         make: req.body.make,
         transmission: req.body.transmission,
         year: req.body.year,
@@ -47,11 +63,15 @@ router.post("/", async (req, res) => {
         mileage: req.body.mileage,
         condition: req.body.condition,
         comment: req.body.comment
-    };
+    });
+
     try {
-        const postedCar = await postedCar.save();
+        const postedCar = await newCar.save();
         res.send(postedCar);
-      } catch (err) {}
+        console.log(req.body)
+      } catch (err) {
+        console.log(err)
+      }
 })
 
 
